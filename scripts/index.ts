@@ -1,2 +1,3 @@
 import { convertXMLToTradeMarkJson } from "./convertXMLToTradeMarkJson"
-export { convertXMLToTradeMarkJson }
+import { populateDatabase } from "./populateDatabase"
+export { convertXMLToTradeMarkJson, populateDatabase }
