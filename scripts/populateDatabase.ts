@@ -7,7 +7,7 @@ async function populateDatabase(client: PrismaClient) {
   for (const path of trademarkPaths) {
     let tradeMarkJSON = await parseJSONFile(`${process.env.SAVE_PATH}/${path}`)
     let tradeMarkObj = new TradeMark(tradeMarkJSON)
-    console.log({ file: `${process.env.SAVE_PATH}/${path}`, tradeMarkJSON })
+    // console.log({ file: `${process.env.SAVE_PATH}/${path}`, tradeMarkJSON })
 
     let result = await client.tradeMark.create({
       data: {
