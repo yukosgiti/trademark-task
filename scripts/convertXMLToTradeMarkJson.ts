@@ -1,6 +1,5 @@
 import fs from "fs/promises";
 import xml2js from "xml2js";
-import 'dotenv/config'
 
 /**
  * Reads TradeMark XML files from 'FILES_PATH' given in .env file.
