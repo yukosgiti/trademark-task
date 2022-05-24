@@ -34,7 +34,6 @@ class TradeMark {
   markCurrentStatusCodeMilestone: number | null;
   markCurrentStatusCodeStatus: number | null;
   markCurrentStatusDate: Date;
-  markFeature: string;
   wordMark: string;
   publications: Publication[] | null
   kindMark: string | null;
