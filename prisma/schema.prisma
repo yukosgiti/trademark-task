@@ -11,9 +11,10 @@ datasource db {
 }
 
 model TradeMark {
-  id                            Int                       @id @default(autoincrement())
-  createdAt                     DateTime                  @default(now())
-  updatedAt                     DateTime                  @updatedAt
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   operationCode                 OperationCode
   applicationDate               DateTime                  @db.Date
   applicationNumber             Int                       @db.Integer
@@ -22,6 +23,7 @@ model TradeMark {
   kindMark                      KindType?
   wordMark                      String                    @db.Text
   tradeDistinctivenessIndicator Boolean?
+  registrationDate              DateTime?                 @db.Date
   secondLanguageCode            EMSecondLanguageCodeType?
 
   //MarkCurrentStatusCode
