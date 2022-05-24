@@ -66,11 +66,12 @@ model GoodsServiceDescription {
 }
 
 model Publication {
-  id                    Int       @id @default(autoincrement())
-  publicationDate       DateTime  @db.Date
-  publicationIdentifier String    @db.VarChar(50)
+  id                    Int                    @id @default(autoincrement())
+  publicationDate       DateTime               @db.Date
+  publicationIdentifier String                 @db.VarChar(50)
   publicationPage       Int?
-  TradeMark             TradeMark @relation(fields: [tradeMarkId], references: [id])
+  publicationSection    PublicationSectionType
+  TradeMark             TradeMark              @relation(fields: [tradeMarkId], references: [id])
   tradeMarkId           Int
 
   createdAt DateTime @default(now())
