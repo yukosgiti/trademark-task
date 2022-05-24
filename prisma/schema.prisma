@@ -36,17 +36,16 @@ model TradeMark {
 }
 
 model ClassDescription {
-  id                      Int                       @id @default(autoincrement())
-  classNumber             Int
-  GoodsServiceDescription GoodsServiceDescription[]
-  goodsServiceId          Int
+  id          Int @id @default(autoincrement())
+  classNumber Int
 
 
   TradeMark TradeMark @relation(fields: [tradeMarkId], references: [id])
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  tradeMarkId Int
+  createdAt               DateTime                  @default(now())
+  updatedAt               DateTime                  @updatedAt
+  tradeMarkId             Int
+  GoodsServiceDescription GoodsServiceDescription[]
 }
 
 model GoodsServiceDescription {
