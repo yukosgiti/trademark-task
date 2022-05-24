@@ -24,20 +24,20 @@ function parseMarkCurrentStatusCode(code: string) {
 }
 
 class TradeMark {
-  operationCode: string | null;
+  operationCode: OperationCode | null;
   applicationNumber: number | null;
   applicationDate: Date | null;
   registrationDate: Date | null;
-  applicationLanguageCode: string | null;
+  applicationLanguageCode: EUOfficialLanguageCode | null;
   expiryDate: Date | null;
-  secondLanguageCode: string | null;
-  markCurrentStatusCode: string;
+  secondLanguageCode: EMSecondLanguageCodeType | null;
+  markCurrentStatusCode: MarkCurrentStatusCodeStatus;
   markCurrentStatusCodeMilestone: number | null;
   markCurrentStatusCodeStatus: number | null;
   markCurrentStatusDate: Date;
   wordMark: string;
   publications: Publication[] | null
-  kindMark: string | null;
+  kindMark: KindType | null;
   tradeDistinctivenessIndicator: boolean | null;
   classDescriptions: ClassDescription[] | null;
 
@@ -51,7 +51,7 @@ class TradeMark {
     this.expiryDate = tm.ExpiryDate?.[0] != null ? new Date(tm.ExpiryDate[0]) : null;
     this.applicationLanguageCode = tm.ApplicationLanguageCode[0].toUpperCase() as EUOfficialLanguageCode;
 
-    this.kindMark = tm.KindMark?.[0] as KindType
+    this.kindMark = tm.KindMark?.[0].replaceAll(" ", "") as KindType
     this.wordMark = tm.WordMarkSpecification[0].MarkVerbalElementText[0]
     this.tradeDistinctivenessIndicator = tm.TradeDistinctivenessIndicator?.[0] === "true"
     this.secondLanguageCode = tm.SecondLanguageCode?.[0].toUpperCase() as EMSecondLanguageCodeType

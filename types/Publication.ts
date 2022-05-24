@@ -9,7 +9,7 @@ class Publication {
   publicationDate: Date;
   publicationIdentifier: any;
   publicationPage: number | null;
-  publicationSection: string | null;
+  publicationSection: PublicationSectionType | null;
 
   constructor(publicationNode: any) {
     const { PublicationIdentifier, PublicationSection, PublicationDate, PublicationPage } = publicationNode;
