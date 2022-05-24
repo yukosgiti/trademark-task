@@ -16,7 +16,7 @@ model TradeMark {
   updatedAt DateTime @updatedAt
 
   operationCode                 OperationCode
-  applicationDate               DateTime                  @db.Date
+  applicationDate               DateTime?                 @db.Date
   applicationNumber             Int                       @db.Integer
   expiryDate                    DateTime?                 @db.Date
   applicationLanguageCode       EUOfficialLanguageCode?
