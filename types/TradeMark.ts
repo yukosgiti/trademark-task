@@ -1,4 +1,5 @@
 import { OperationCode, EUOfficialLanguageCode, KindType, EMSecondLanguageCodeType, MarkCurrentStatusCodeStatus } from "@prisma/client";
+import { ClassDescription } from "./ClassDescription";
 import { Publication } from "./Publication";
 
 
@@ -38,6 +39,7 @@ class TradeMark {
   publications: Publication[] | null
   kindMark: string | null;
   tradeDistinctivenessIndicator: boolean | null;
+  classDescriptions: ClassDescription[] | null;
 
   constructor(tradeMarkJson: any) {
     let tm = tradeMarkJson[0];
@@ -46,14 +48,15 @@ class TradeMark {
     this.applicationNumber = (tm.ApplicationNumber?.[0] != null ?
       Number.parseInt(tm.ApplicationNumber[0]) :
       null);
-    this.expiryDate = new Date(tm.ExpiryDate[0])
+    this.expiryDate = tm.ExpiryDate?.[0] != null ? new Date(tm.ExpiryDate[0]) : null;
     this.applicationLanguageCode = tm.ApplicationLanguageCode[0].toUpperCase() as EUOfficialLanguageCode;
 
     this.kindMark = tm.KindMark?.[0] as KindType
     this.wordMark = tm.WordMarkSpecification[0].MarkVerbalElementText[0]
     this.tradeDistinctivenessIndicator = tm.TradeDistinctivenessIndicator?.[0] === "true"
     this.secondLanguageCode = tm.SecondLanguageCode?.[0].toUpperCase() as EMSecondLanguageCodeType
-    this.registrationDate = new Date(tm.RegistrationDate[0])
+
+    this.registrationDate = tm.RegistrationDate?.[0] != null ? new Date(tm.RegistrationDate[0]) : null;
 
     this.markCurrentStatusCode = parseMarkCurrentStatusCode(tm.MarkCurrentStatusCode[0]["_"]);
     this.markCurrentStatusCodeMilestone = tm.MarkCurrentStatusCode[0]["$"].milestone != null ?
@@ -68,6 +71,7 @@ class TradeMark {
     // this.markFeature = tm.MarkFeature[0];
     this.publications = tm.PublicationDetails?.[0].Publication.map((publicationNode: any) => new Publication(publicationNode))
 
+    this.classDescriptions = tm.GoodsServicesDetails[0]?.GoodsServices[0]?.ClassDescriptionDetails?.[0].ClassDescription.map((d: any) => new ClassDescription(d))
   }
 }
 
