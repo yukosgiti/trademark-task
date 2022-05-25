@@ -33,13 +33,6 @@ async function populateDatabase(client: PrismaClient) {
             })) ?? []
           }
         },
-        ClassDescription: {
-          createMany: {
-            data: tradeMarkObj.classDescriptions?.map(i => ({
-              classNumber: i.classNumber!
-            })) ?? []
-          }
-        }
       }
     })
 
