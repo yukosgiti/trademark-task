@@ -44,34 +44,34 @@ class TradeMark {
   constructor(tradeMarkJson: any) {
     let tm = tradeMarkJson[0];
     this.operationCode = tm?.["$"]?.operationCode as OperationCode; // Insert;
-    this.applicationDate = tm.ApplicationDate?.[0] != null ? new Date(tm.ApplicationDate[0]) : null;
-    this.applicationNumber = (tm.ApplicationNumber?.[0] != null ?
-      Number.parseInt(tm.ApplicationNumber[0]) :
+    this.applicationDate = tm?.ApplicationDate?.[0] != null ? new Date(tm.ApplicationDate[0]) : null;
+    this.applicationNumber = (tm?.ApplicationNumber?.[0] != null ?
+      Number.parseInt(tm?.ApplicationNumber[0]) :
       null);
-    this.expiryDate = tm.ExpiryDate?.[0] != null ? new Date(tm.ExpiryDate[0]) : null;
-    this.applicationLanguageCode = tm.ApplicationLanguageCode[0].toUpperCase() as EUOfficialLanguageCode;
+    this.expiryDate = tm?.ExpiryDate?.[0] != null ? new Date(tm.ExpiryDate[0]) : null;
+    this.applicationLanguageCode = tm?.ApplicationLanguageCode[0].toUpperCase() as EUOfficialLanguageCode;
 
-    this.kindMark = tm.KindMark?.[0].replaceAll(" ", "") as KindType
-    this.wordMark = tm.WordMarkSpecification[0].MarkVerbalElementText[0]
-    this.tradeDistinctivenessIndicator = tm.TradeDistinctivenessIndicator?.[0] === "true"
-    this.secondLanguageCode = tm.SecondLanguageCode?.[0].toUpperCase() as EMSecondLanguageCodeType
+    this.kindMark = tm?.KindMark?.[0].replaceAll(" ", "") as KindType
+    this.wordMark = tm?.WordMarkSpecification[0].MarkVerbalElementText[0]
+    this.tradeDistinctivenessIndicator = tm?.TradeDistinctivenessIndicator?.[0] === "true"
+    this.secondLanguageCode = tm?.SecondLanguageCode?.[0].toUpperCase() as EMSecondLanguageCodeType
 
-    this.registrationDate = tm.RegistrationDate?.[0] != null ? new Date(tm.RegistrationDate[0]) : null;
+    this.registrationDate = tm?.RegistrationDate?.[0] != null ? new Date(tm.RegistrationDate[0]) : null;
 
-    this.markCurrentStatusCode = parseMarkCurrentStatusCode(tm.MarkCurrentStatusCode[0]["_"]);
-    this.markCurrentStatusCodeMilestone = tm.MarkCurrentStatusCode[0]["$"].milestone != null ?
-      Number.parseInt(tm.MarkCurrentStatusCode[0]["$"].milestone) : null;
+    this.markCurrentStatusCode = parseMarkCurrentStatusCode(tm?.MarkCurrentStatusCode[0]["_"]);
+    this.markCurrentStatusCodeMilestone = tm?.MarkCurrentStatusCode[0]["$"].milestone != null ?
+      Number.parseInt(tm?.MarkCurrentStatusCode[0]["$"].milestone) : null;
 
 
-    this.markCurrentStatusCodeStatus = tm.MarkCurrentStatusCode[0]["$"].status != null ?
-      Number.parseInt(tm.MarkCurrentStatusCode[0]["$"].status) : null
+    this.markCurrentStatusCodeStatus = tm?.MarkCurrentStatusCode[0]["$"].status != null ?
+      Number.parseInt(tm?.MarkCurrentStatusCode[0]["$"].status) : null
       ;
-    this.markCurrentStatusDate = new Date(tm.MarkCurrentStatusDate[0])
+    this.markCurrentStatusDate = new Date(tm?.MarkCurrentStatusDate[0])
 
     // this.markFeature = tm.MarkFeature[0];
-    this.publications = tm.PublicationDetails?.[0].Publication.map((publicationNode: any) => new Publication(publicationNode))
+    this.publications = tm?.PublicationDetails?.[0].Publication.map((publicationNode: any) => new Publication(publicationNode))
 
-    this.classDescriptions = tm.GoodsServicesDetails[0]?.GoodsServices[0]?.ClassDescriptionDetails?.[0].ClassDescription.map((d: any) => new ClassDescription(d))
+    this.classDescriptions = tm?.GoodsServicesDetails[0]?.GoodsServices[0]?.ClassDescriptionDetails?.[0].ClassDescription.map((d: any) => new ClassDescription(d))
   }
 }
 
