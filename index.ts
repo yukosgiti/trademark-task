@@ -1,22 +1,32 @@
-import { PrismaClient } from '@prisma/client'
+import { Prisma, PrismaClient, TradeMark } from '@prisma/client'
 import { convertXMLToTradeMarkJson, populateDatabase } from './scripts'
 import 'dotenv/config'
-import path from 'path';
 import fs from "fs/promises"
 import express from "express";
-import { pseudoRandomBytes } from 'crypto';
 
 const prisma = new PrismaClient()
 
 const app = express();
 const port = process.env.PORT;
 
+type Query = {
+  q: string,
+  descriptionLanguage?: string
+}
+
 app.get('/', async (req, res) => {
-  let a = req.query
-  let result = await prisma.tradeMark.findMany({
+  let a = req.query as Query;
+  res.type("json");
+
+  if (a.q == null) {
+    return res.status(422).send({
+      message: "Parameter 'q' is missing."
+    })
+  }
+  let result = await prisma.tradeMark.findFirst({
     where: {
       wordMark: {
-        contains: a.q as string,
+        equals: a.q,
         mode: "insensitive"
       }
     },
@@ -33,18 +43,32 @@ app.get('/', async (req, res) => {
       markCurrentStatusCodeStatus: true,
       ClassDescription: {
         select: {
-          GoodsServiceDescription: true,
+          GoodsServiceDescription: {
+            where: {
+              languageCode: a.descriptionLanguage
+            }
+          },
           classNumber: true,
-
-        }
+        },
       }
 
     }
   })
+  if (result == null) {
+    // No content
+    return res.status(204).send();
+  }
+
+  return res.send(result);
+
+})
+
+app.get("/fuzzy", async (req, res) => {
+  let a = req.query as Query;
+  let result = await fuzzySearch(prisma, a.q, 10)
   res.type("json");
   res.send(result);
 })
-
 
 async function ensureEnv() {
 
@@ -67,9 +91,28 @@ async function ensureEnv() {
   }
 }
 
+async function fuzzySearch(client: PrismaClient, word: string, limit: number = 10) {
+  let clampedLimit = Math.min(50, Math.max(limit, 0))
+
+  let wordMarkName: keyof TradeMark = "wordMark"
+  //SIMILARITY function comes from the extension.
+  let response = await prisma.$queryRaw`
+    SELECT *, SIMILARITY("wordMark", ${word}) as sim FROM "TradeMark" ORDER BY sim DESC LIMIT ${clampedLimit};`
+  return response;
+}
+
+app.use(function (err: any, req: any, res: { status: (arg0: number) => void; send: (arg0: string) => void; }, next: any) {
+  res.status(500);
+  res.send("Oops, something went wrong.")
+});
+
 async function main() {
   await ensureEnv();
-  // await populateDatabase(prisma)
+
+  //Fuzzy search extension.
+  await prisma.$executeRaw`CREATE EXTENSION IF NOT EXISTS pg_trgm`;
+
+  // await populateDatabase(prisma);
   // await convertXMLToTradeMarkJson()
 
   app.listen(port, () => {
